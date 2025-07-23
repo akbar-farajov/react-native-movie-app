@@ -19,7 +19,7 @@ export default function Index() {
     data: movies,
     loading: moviesLoading,
     error: moviesError,
-  } = useFetch(() => fetchMovies({ query: "shut" }));
+  } = useFetch(() => fetchMovies({ query: "" }));
 
   const router = useRouter();
   return (
@@ -38,9 +38,9 @@ export default function Index() {
             className="mt-10 self-center"
           />
         ) : moviesError ? (
-          <Text></Text>
+          <Text>Error</Text>
         ) : (
-          <View className="flex-1 mt-5">
+          <View className="flex-1">
             <SearchBar
               placeholder="Search"
               onPress={() => {
