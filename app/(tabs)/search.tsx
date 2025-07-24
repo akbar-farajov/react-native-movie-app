@@ -3,6 +3,7 @@ import Searchbar from "@/components/Searchbar";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
+import { updateSearchCount } from "@/services/appwrite";
 import useFetch from "@/services/useFetch";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
@@ -28,6 +29,12 @@ const Search = () => {
     }, 500);
     return () => clearTimeout(timeoutId);
   }, [query]);
+
+  useEffect(() => {
+    if (movies?.length! > 0 && movies?.[0]) {
+      updateSearchCount(query, movies[0]);
+    }
+  }, [movies]);
 
   return (
     <View className="flex-1 bg-primary">
@@ -86,12 +93,15 @@ const Search = () => {
           </>
         }
         ListEmptyComponent={
-          <View className="flex-1 justify-center items-center mt-10">
-            <Text className="text-white text-center">
-              No results found{" "}
-              {query && <Text className="text-accent">for {query}</Text>}
-            </Text>
-          </View>
+          !loading && !error ? (
+            <View className="flex-1 justify-center items-center mt-10">
+              <Text className="text-white text-center">
+                {query.trim()
+                  ? `No movies found for "${query}"`
+                  : "Start typing to search for movies"}
+              </Text>
+            </View>
+          ) : null
         }
       />
     </View>
